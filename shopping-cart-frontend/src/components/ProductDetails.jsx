@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import React, { useEffect, useState, useContext } from "react";
+import CartContext from "../context/CartContext";
 
 function Carousel({images})
 {
@@ -21,22 +21,31 @@ function Carousel({images})
 
 <button className="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
 	{/* <span className="carousel-control-prev-icon carousel-control-button"></span> */}
-	<i class="fas fa-angle-left carousel-control-button"></i>
+	<i className="fas fa-angle-left carousel-control-button"></i>
 </button>
 <button className="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
-	<i class="fas fa-angle-right carousel-control-button"></i>
+	<i className="fas fa-angle-right carousel-control-button"></i>
 	{/* <span className="carousel-control-next-icon carousel-control-button"></span> */}
 </button>
 </div>)
 }
 
+// function addToCart(product) {
+// 	let cart = localStorage.getItem("shopping_cart");
+// 	if (!cart) {
+// 		cart = "[]";
+// 	}
+// 	cart = JSON.parse(cart);
+// 	cart.push(product)
+// }
 
 function ProductDetails(props)
 {
-	let params = useParams();
+	// let params = useParams();
+	const {cart, addToCart} = useContext(CartContext);
 	const [product, setProduct] = useState(null);
 	useEffect(() => {
-		fetch(`https://dummyjson.com/products/${params.id}`)
+		fetch(`https://dummyjson.com/products/${props.id}`)
 		.then(res => res.json())
 		.then((data) => {
 			setProduct({...data});
@@ -57,7 +66,7 @@ function ProductDetails(props)
 		{/* Product Details ID: { product.id } */}
 		<div className="d-flex flex-row justify-content-between">
 			<div className="p-2"><span className="p-1">Price: </span><span className="h2">${product.price}</span></div>
-			<div className="p-2"><button className="btn add-to-cart-btn" onClick={()=>{props.addToCart(product)}}>Add to cart</button></div>
+			<div className="p-2"><button className="btn add-to-cart-btn" onClick={()=>{addToCart(product)}}>Add to cart</button></div>
 		</div>
 	</>
 }

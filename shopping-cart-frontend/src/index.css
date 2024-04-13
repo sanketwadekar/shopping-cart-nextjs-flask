@@ -57,8 +57,8 @@ code {
 }
 
 .cart-li {
-  height: 3em;
-  width: 3em;
+  max-height: 3em;
+  max-width: 100%;
   overflow: hidden;
 }
 
