@@ -3,18 +3,45 @@ import CartContext from "./context/CartContext";
 
 function NavBarPopup({cartList, clearCart, deleteFromCart})
 {
-	function processPayment()
+	async function processPayment()
 	{
-		let success = true;
 		if (cartList.length == 0) {
 			alert("Cart is empty");
 			return;
 		}
-		if (success) {
+		let itemsToBuy = [];
+		let itemsMap = {};
+		cartList.forEach(item=>{
+			console.log(itemsMap)
+			if (!itemsMap[item['id']]) {
+				itemsMap[item['id']] = 1;
+			} else {
+				itemsMap[item['id']] += 1;
+			}
+		})
+		for (let key in itemsMap) {
+			itemsToBuy.push({
+				id: key,
+				quantity: itemsMap[key]
+			})
+		}
+
+		let response = await fetch("http://localhost:8000/checkout",
+		{method: "POST", headers: {'Content-Type': 'application/json'},
+		body: JSON.stringify(itemsToBuy)})
+		.then(res => {
+			let data = res.json();
+			console.log(data);
+			return data;
+		});
+
+		console.log(response);
+
+		if (response.status == 1) {
 			alert("Order placed successfully");
 			clearCart();
 		} else {
-			alert("Could not place order.")
+			alert(`Could not place order. There are only ${response.stock} items of ${response.title} left.`)
 		}
 	}
 	let totalPrice = 0;
@@ -64,8 +91,12 @@ function NavBar({items})
 {
 	const {cart, clearCart, deleteFromCart} = useContext(CartContext);
 	return <>
-		<nav className="navbar flex flex-row-reverse" style={{background: "#248266"}}>
-			<NavBarPopup cartList={cart} clearCart={clearCart} deleteFromCart={deleteFromCart}/>
+		<NavBarPopup cartList={cart} clearCart={clearCart} deleteFromCart={deleteFromCart}/>
+		<nav className="navbar navbar-fixed-top flex flex-row justify-content-between" style={{background: "#e8a735"}}>
+			<a href="/" style={{textDecoration: "none", color: "#000000"}}>
+				<div className="mx-2"><i className="fa-solid fa-home"></i></div>
+			</a>
+			<div className="mx-2 fw-bold h5">Shopping Site</div>
 			<a href="#" style={{textDecoration: "none", color: "#000000"}}>
 				<div className="mx-2" data-bs-toggle="modal" data-bs-target="#myModal">View Cart <i className="fa-solid fa-cart-shopping"></i> {cart.length}</div>
 			</a>

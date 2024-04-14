@@ -7,13 +7,13 @@ function Carousel({images})
 
 <div className="carousel-indicators">
 	{images && images.map((image, index) => {
-		return <button type="button" className={`${index == 0 && "active"}`}data-bs-target="#demo" data-bs-slide-to={index} ></button>
+		return <button type="button" key={index} className={`${index == 0 && "active"}`}data-bs-target="#demo" data-bs-slide-to={index} ></button>
 	})}
 </div>
 
 <div className="carousel-inner">
 	{images && images.map((image, index) => {
-		return <div className={`carousel-item ${index == 0 && "active"}`}>
+		return <div key={index} className={`carousel-item ${index == 0 && "active"}`}>
 				<img src={image} alt="image" className="d-block mx-auto" style={{minHeight: "100%"}}/>
 			</div>
 	})}
@@ -45,7 +45,7 @@ function ProductDetails(props)
 	const {cart, addToCart} = useContext(CartContext);
 	const [product, setProduct] = useState(null);
 	useEffect(() => {
-		fetch(`https://dummyjson.com/products/${props.id}`)
+		fetch(`http://localhost:8000/products/${props.id}`)
 		.then(res => res.json())
 		.then((data) => {
 			setProduct({...data});
@@ -66,6 +66,7 @@ function ProductDetails(props)
 		{/* Product Details ID: { product.id } */}
 		<div className="d-flex flex-row justify-content-between">
 			<div className="p-2"><span className="p-1">Price: </span><span className="h2">${product.price}</span></div>
+			<div className="p-3"><span className="fw-bold">Description:</span> {product.description}</div>
 			<div className="p-2"><button className="btn add-to-cart-btn" onClick={()=>{addToCart(product)}}>Add to cart</button></div>
 		</div>
 	</>
