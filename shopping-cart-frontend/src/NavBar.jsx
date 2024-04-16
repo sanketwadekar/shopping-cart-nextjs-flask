@@ -1,7 +1,7 @@
 import React, {useContext} from "react";
 import CartContext from "./context/CartContext";
 
-function NavBarPopup({cartList, clearCart, deleteFromCart})
+function CartPopup({cartList, clearCart, deleteFromCart})
 {
 	async function processPayment()
 	{
@@ -12,7 +12,6 @@ function NavBarPopup({cartList, clearCart, deleteFromCart})
 		let itemsToBuy = [];
 		let itemsMap = {};
 		cartList.forEach(item=>{
-			console.log(itemsMap)
 			if (!itemsMap[item['id']]) {
 				itemsMap[item['id']] = 1;
 			} else {
@@ -26,16 +25,13 @@ function NavBarPopup({cartList, clearCart, deleteFromCart})
 			})
 		}
 
-		let response = await fetch("http://localhost:8000/checkout",
+		let response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}checkout`,
 		{method: "POST", headers: {'Content-Type': 'application/json'},
 		body: JSON.stringify(itemsToBuy)})
 		.then(res => {
 			let data = res.json();
-			console.log(data);
 			return data;
 		});
-
-		console.log(response);
 
 		if (response.status == 1) {
 			alert("Order placed successfully");
@@ -48,12 +44,12 @@ function NavBarPopup({cartList, clearCart, deleteFromCart})
  return <>
  <div className="modal modal-lg fade" id="myModal">
   <div className="modal-dialog">
-    <div className="modal-content">
+    <div className="modal-content modal-content-style">
       <div className="modal-header">
         <h4 className="modal-title">Shopping Cart</h4>
         <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div className="modal-body container">
+      <div className="modal-body container overflow-scroll">
 				<div className="row p-4 fw-bold">
 						<div className="col-2">Sr. No.</div>
 						<div className="col-7">Item</div>
@@ -68,7 +64,7 @@ function NavBarPopup({cartList, clearCart, deleteFromCart})
 							<img src={item.thumbnail}></img>
 						</div>
 						<div className="col-2 fw-bold">${item.price}</div>
-						<div className="col-1 fw-bold"><i className="fas fa-trash-alt" style={{color: "red", cursor: "pointer"}} onClick={()=>{deleteFromCart(index)}}></i></div>
+						<div className="col-1 fw-bold"><i className="fas fa-trash-alt delete-icon"  onClick={()=>{deleteFromCart(index)}}></i></div>
 						</div>)
 				})}
       </div>
@@ -87,17 +83,17 @@ function NavBarPopup({cartList, clearCart, deleteFromCart})
  </>
 }
 
-function NavBar({items})
+function NavBar()
 {
 	const {cart, clearCart, deleteFromCart} = useContext(CartContext);
 	return <>
-		<NavBarPopup cartList={cart} clearCart={clearCart} deleteFromCart={deleteFromCart}/>
-		<nav className="navbar navbar-fixed-top flex flex-row justify-content-between" style={{background: "#e8a735"}}>
-			<a href="/" style={{textDecoration: "none", color: "#000000"}}>
+		<CartPopup cartList={cart} clearCart={clearCart} deleteFromCart={deleteFromCart}/>
+		<nav className="navbar navbar-fixed-top flex flex-row justify-content-between" >
+			<a href="/" className="navbar-links">
 				<div className="mx-2"><i className="fa-solid fa-home"></i></div>
 			</a>
 			<div className="mx-2 fw-bold h5">Shopping Site</div>
-			<a href="#" style={{textDecoration: "none", color: "#000000"}}>
+			<a href="#" className="navbar-links">
 				<div className="mx-2" data-bs-toggle="modal" data-bs-target="#myModal">View Cart <i className="fa-solid fa-cart-shopping"></i> {cart.length}</div>
 			</a>
 		</nav>

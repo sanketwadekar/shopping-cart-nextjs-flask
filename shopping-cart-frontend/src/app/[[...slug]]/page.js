@@ -1,4 +1,4 @@
-import '../../index.css'
+import '../index.css'
 import { ClientOnly } from './client'
 
 export function generateStaticParams() {
@@ -6,5 +6,5 @@ export function generateStaticParams() {
 }
 
 export default function Page() {
-  return <ClientOnly/>;
+  return <ClientOnly />;
 }

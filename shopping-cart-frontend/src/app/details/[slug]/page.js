@@ -1,4 +1,4 @@
-import '../../../index.css'
+import '../../index.css'
 import { ClientOnly } from './client'
 
 export async function generateStaticParams() {
@@ -6,13 +6,13 @@ export async function generateStaticParams() {
 	for (let i = 0; i < 100; i++) {
 		posts.push(i);
 	}
-  let slugs = posts.map((post) => ({
-    slug: post.toString(),
-  }))
+	let slugs = posts.map((post) => ({
+		slug: post.toString(),
+	}))
 	return slugs;
 }
 
-export default function Page({params}) {
-	const {slug} = params;
-  return <ClientOnly id={slug}/>;
+export default function Page({ params }) {
+	const { slug } = params;
+	return <ClientOnly id={slug} />;
 }
