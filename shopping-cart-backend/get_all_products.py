@@ -1,16 +1,11 @@
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import firestore
 
 def get_all_products():
-    # Initialize Firebase Admin SDK with your credentials
-
-    # Initialize Firestore client
     db = firestore.client()
 
-    # Reference to the "products" collection
     products_ref = db.collection('products')
 
-    # Retrieve all documents from the "products" collection
     products = products_ref.get()
 
     # Store the documents in a list

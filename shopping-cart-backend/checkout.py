@@ -1,15 +1,9 @@
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import firestore
 
 def update_products_quantities(products_list):
-    # Initialize Firebase Admin SDK with your credentials
-    # cred = credentials.Certificate("./serviceAccountKey.json")
-    # firebase_admin.initialize_app(cred)
-
-    # Initialize Firestore client
     db = firestore.client()
 
-    # Reference to the "products" collection
     products_ref = db.collection('products')
 
     # Flag to track if all products have sufficient quantities
